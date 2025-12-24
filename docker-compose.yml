@@ -3,7 +3,7 @@ services:
     image: mongo:6.0
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - "127.0.0.1:27017:27017"
     volumes:
       - mongo-data:/data/db
       # 初始化脚本 - 首次启动自动执行
@@ -22,7 +22,7 @@ services:
     restart: unless-stopped
     working_dir: /app
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     environment:
       PORT: 3000
       NODE_ENV: production
