@@ -1,0 +1,50 @@
+services:
+  mongo:
+    image: mongo:6.0
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+      # 初始化脚本 - 首次启动自动执行
+      - ./mongo-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      NODE_ENV: production
+      MONGO_URI: mongodb://mongo:27017/haigou
+      MONGO_URI_MAPDATA: mongodb://mongo:27017/mapdata
+      JWT_SECRET: ${JWT_SECRET:-}
+      JWT_SECRET_ADMIN: ${JWT_SECRET_ADMIN:-}
+      JWT_SECRET_CAPTCHA: ${JWT_SECRET_CAPTCHA:-}
+      SESSION_SECRET: ${SESSION_SECRET:-}
+    volumes:
+      # 挂载源码便于本地修改实时生效
+      - ./:/app
+      # 保持容器内依赖独立，不与宿主机 node_modules 混淆
+      - backend-node-modules:/app/node_modules
+      # 挂载日志目录
+      - ./logs:/app/logs
+    command: >
+      bash -lc "if [ ! -d node_modules ] || [ -z \"$(ls -A node_modules 2>/dev/null)\" ]; then pnpm install --prod && pnpm add @resvg/resvg-js-linux-arm64-gnu@2.6.2; fi && pnpm start"
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+volumes:
+  mongo-data:
+  backend-node-modules:

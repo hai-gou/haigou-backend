@@ -1,0 +1,38 @@
+{
+  "name": "haigou-backend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www",
+    "doc": "apidoc -i api/ -o public/apidoc && apidoc -i admin/ -o public/admindoc"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "connect-mongo": "^5.1.0",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "express-session": "^1.18.2",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "jsonwebtoken": "^8.5.1",
+    "md5": "^2.3.0",
+    "mongoose": "^5.11.19",
+    "morgan": "~1.9.1",
+    "node-xlsx": "^0.16.1",
+    "socket.io": "^4.3.2",
+    "svg-captcha": "^1.4.0",
+    "svg2img": "^1.0.0-beta.2",
+    "urlencode": "^1.1.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "apidoc": "^0.53.0"
+  },
+  "apidoc": {
+    "title": "嗨购电商平台接口",
+    "url": "http://localhost:3001"
+  },
+  "packageManager": "pnpm@10.26.2+sha512.0e308ff2005fc7410366f154f625f6631ab2b16b1d2e70238444dd6ae9d630a8482d92a451144debc492416896ed16f7b114a86ec68b8404b2443869e68ffda6"
+}
